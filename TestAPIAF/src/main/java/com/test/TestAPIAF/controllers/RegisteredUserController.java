@@ -1,8 +1,8 @@
 package com.test.TestAPIAF.controllers;
 
 import javax.management.InstanceAlreadyExistsException;
-import javax.servlet.http.HttpServletResponse;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.test.TestAPIAF.services.IRegisteredUserService;
 
-import javassist.NotFoundException;
-
+import com.test.TestAPIAF.dtos.RegisteredUserDTO;
 import com.test.TestAPIAF.model.RegisteredUser;
 
 @RestController
@@ -26,30 +25,51 @@ public class RegisteredUserController {
 	
 	@Autowired IRegisteredUserService registeredUserService;
 	
+	/**
+	 * Get a user using its user name
+	 * @param userName
+	 * @return
+	 */
 	@GetMapping("/users/{username}")
-	public ResponseEntity<RegisteredUser> getUsersById(@PathVariable(value = "username") String userName, HttpServletResponse response){
+	public ResponseEntity<RegisteredUserDTO> getUsersById(@PathVariable(value = "username") String userName){
+		RegisteredUser returnUser = null;
+		ModelMapper modelMapper = new ModelMapper();
 		try {
-			return ResponseEntity.ok().body(registeredUserService.getRegisteredUser(userName));
+			returnUser = registeredUserService.getRegisteredUser(userName);
 		}catch(IllegalArgumentException iae) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal user name", iae);
-		}catch(NotFoundException nfe) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found", nfe);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal user name");
 		}catch(Exception ex) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), ex);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error");
 		}
-		
+		if(returnUser != null) {
+			return ResponseEntity.ok().body(modelMapper.map(returnUser, RegisteredUserDTO.class));
+		}else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+		}
 	}
 	
+	/**
+	 * Save a user into database if all values are set and correct
+	 * @param user : user data
+	 * @return the user saved in database
+	 */
 	@PostMapping("/users")
-	public RegisteredUser createUser(@RequestBody RegisteredUser user, HttpServletResponse response){
+	public RegisteredUserDTO createUser(@RequestBody RegisteredUserDTO user){
 		try {
-			return registeredUserService.addRegisteredUser(user);
+			ModelMapper modelMapper = new ModelMapper();
+			RegisteredUser modelUser = modelMapper.map(user, RegisteredUser.class);
+			RegisteredUser returnUser = registeredUserService.addRegisteredUser(modelUser);
+			/* I let the result unchecked because I had to throw an exception if it's null (save shall not return null). 
+			the exception will be caught by the last catch sending the correct status */
+			return modelMapper.map(returnUser, RegisteredUserDTO.class);
 		}catch(IllegalArgumentException iae) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, iae.getLocalizedMessage(), iae);
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, iae.getLocalizedMessage());
+		}catch(IllegalStateException ise) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, ise.getLocalizedMessage());
 		}catch(InstanceAlreadyExistsException iaee) {
-			throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists", iaee);
+			throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
 		}catch(Exception ex) {
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), ex);
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error");
 		}
 	}
 }

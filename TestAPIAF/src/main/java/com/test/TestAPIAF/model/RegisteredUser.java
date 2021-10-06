@@ -1,7 +1,6 @@
 package com.test.TestAPIAF.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -66,10 +65,18 @@ public class RegisteredUser {
 	public Long getId() {
 		return id;
 	}
+	
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		if(this.id != null) {
+			return Objects.hash(id);
+		}
+		return -1;
 	}
 
 	@Override
