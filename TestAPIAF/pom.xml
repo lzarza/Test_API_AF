@@ -53,6 +53,22 @@
 		    <artifactId>springfox-swagger2</artifactId>
 		    <version>3.0.0</version>
 		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.module</groupId>
+		    <artifactId>jackson-module-parameter-names</artifactId>
+		</dependency>
+		
+		<!--	Java 8 Date/time	-->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		
+		<!--	Java 8 Datatypes	-->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jdk8</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

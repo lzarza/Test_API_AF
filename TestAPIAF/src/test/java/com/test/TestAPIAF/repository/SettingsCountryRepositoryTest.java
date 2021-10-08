@@ -1,4 +1,4 @@
-package com.test.TestAPIAF.repositories;
+package com.test.TestAPIAF.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import com.test.TestAPIAF.model.RegisteredUser;
 import com.test.TestAPIAF.model.SettingsCountry;
 
 @SpringBootTest

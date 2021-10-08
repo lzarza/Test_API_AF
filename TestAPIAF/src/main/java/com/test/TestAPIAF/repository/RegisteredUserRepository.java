@@ -1,4 +1,4 @@
-package com.test.TestAPIAF.repositories;
+package com.test.TestAPIAF.repository;
 
 import java.util.Optional;
 

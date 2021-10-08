@@ -1,4 +1,4 @@
-package com.test.TestAPIAF.controllers;
+package com.test.TestAPIAF.controller.impl;
 
 import javax.management.InstanceAlreadyExistsException;
 
@@ -14,28 +14,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.test.TestAPIAF.services.IRegisteredUserService;
-
-import com.test.TestAPIAF.dtos.RegisteredUserDTO;
+import com.test.TestAPIAF.controller.IRegisteredUserController;
+import com.test.TestAPIAF.dto.RegisteredUserDTO;
 import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.service.IRegisteredUserService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class RegisteredUserController {
+public class RegisteredUserController implements IRegisteredUserController {
 	
 	@Autowired IRegisteredUserService registeredUserService;
 	
 	/**
 	 * Get a user using its user name
 	 * @param userName
-	 * @return
+	 * @return the user found with this username
+	 * @throws ResponseStatusException : Bad Request for parameters with invalid formats, Internal Server Error other other issues, not found if no user found
 	 */
+	@Override
 	@GetMapping("/users/{username}")
-	public ResponseEntity<RegisteredUserDTO> getUsersById(@PathVariable(value = "username") String userName){
+	public ResponseEntity<RegisteredUserDTO> getUser(@PathVariable String username){
 		RegisteredUser returnUser = null;
 		ModelMapper modelMapper = new ModelMapper();
 		try {
-			returnUser = registeredUserService.getRegisteredUser(userName);
+			returnUser = registeredUserService.getRegisteredUser(username);
 		}catch(IllegalArgumentException iae) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Illegal user name");
 		}catch(Exception ex) {
@@ -52,7 +54,9 @@ public class RegisteredUserController {
 	 * Save a user into database if all values are set and correct
 	 * @param user : user data
 	 * @return the user saved in database
+	 * @throws ResponseStatusException : Bad Request for parameters with invalid formats, Forbidden for invalid parameter, Conflict for already existing member, Internal Error for other issues
 	 */
+	@Override
 	@PostMapping("/users")
 	public RegisteredUserDTO createUser(@RequestBody RegisteredUserDTO user){
 		try {

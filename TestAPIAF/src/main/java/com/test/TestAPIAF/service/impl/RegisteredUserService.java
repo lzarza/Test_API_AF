@@ -1,4 +1,4 @@
-package com.test.TestAPIAF.services.impl;
+package com.test.TestAPIAF.service.impl;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.test.TestAPIAF.model.RegisteredUser;
 import com.test.TestAPIAF.model.SettingsCountry;
-import com.test.TestAPIAF.repositories.RegisteredUserRepository;
-import com.test.TestAPIAF.repositories.SettingsCountryRepository;
-import com.test.TestAPIAF.services.IRegisteredUserService;
+import com.test.TestAPIAF.repository.RegisteredUserRepository;
+import com.test.TestAPIAF.repository.SettingsCountryRepository;
+import com.test.TestAPIAF.service.IRegisteredUserService;
 
 @Service
 public class RegisteredUserService implements IRegisteredUserService {
@@ -56,7 +56,7 @@ public class RegisteredUserService implements IRegisteredUserService {
 			throw new IllegalStateException("Invalid registration country");
 		}
 		
-		if(userToAdd.getBirthDate().plusYears(settingCountry.get().getMinimumAge()).compareTo(LocalDate.now()) <= 0) {
+		if(userToAdd.getBirthDate().plusYears(settingCountry.get().getMinimumAge()).compareTo(LocalDate.now()) >= 0) {
 			throw new IllegalStateException("Invalid age");
 		}
 		

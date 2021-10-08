@@ -1,4 +1,4 @@
-package com.test.TestAPIAF.services;
+package com.test.TestAPIAF.service;
 
 import javax.management.InstanceAlreadyExistsException;
 

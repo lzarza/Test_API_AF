@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.test.TestAPIAF.services.impl;
+package com.test.TestAPIAF.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,8 +18,8 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.test.TestAPIAF.model.RegisteredUser;
 import com.test.TestAPIAF.model.SettingsCountry;
-import com.test.TestAPIAF.repositories.RegisteredUserRepository;
-import com.test.TestAPIAF.repositories.SettingsCountryRepository;
+import com.test.TestAPIAF.repository.RegisteredUserRepository;
+import com.test.TestAPIAF.repository.SettingsCountryRepository;
 
 /**
  * @author Laurent
@@ -280,7 +280,16 @@ class RegisteredUserServiceTest {
 	@Test
 	void getUserById_ParamNullorEmpty() {
 		try {
-			testRegisteredUserService.getRegisteredUser(testEntity.getUserName());
+			testRegisteredUserService.getRegisteredUser("");
+			fail("Shall have thrown an exception");
+		} catch (IllegalArgumentException iae) {
+			return; //expected result
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		
+		try {
+			testRegisteredUserService.getRegisteredUser(null);
 			fail("Shall have thrown an exception");
 		} catch (IllegalArgumentException iae) {
 			return; //expected result

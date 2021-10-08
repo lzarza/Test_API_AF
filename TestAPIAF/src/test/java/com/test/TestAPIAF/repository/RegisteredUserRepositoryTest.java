@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.test.TestAPIAF.repositories;
+package com.test.TestAPIAF.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 

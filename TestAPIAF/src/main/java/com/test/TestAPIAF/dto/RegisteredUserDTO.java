@@ -1,14 +1,21 @@
-package com.test.TestAPIAF.dtos;
+package com.test.TestAPIAF.dto;
 
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
 public class RegisteredUserDTO {
 	private Long id;
 	private String userName; 
 	
 	@JsonFormat(pattern="dd-MM-yyyy")
+	
+	@JsonSerialize(using = LocalDateSerializer.class)
+	@JsonDeserialize(using = LocalDateDeserializer.class)
 	private LocalDate birthDate;
 	private String countryName;
 	private String phoneNumber; //set as string to preserve format and grant use of + sign for international numbers
