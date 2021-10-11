@@ -2,16 +2,16 @@ package com.test.TestAPIAF.service;
 
 import javax.management.InstanceAlreadyExistsException;
 
-import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.model.User;
 
-public interface IRegisteredUserService {
+public interface IUserService {
 	/**
 	 * Get a registered name by his user name. Return null if no user found
 	 * @param userName
 	 * @return the user found
 	 * @throws IllegalArgumentException if user name is null or empty
 	 */
-	public RegisteredUser getRegisteredUser(String userName) throws IllegalArgumentException;
+	public User getRegisteredUser(String userName) throws IllegalArgumentException;
 	
 	/**
 	 * Register a user into database and return the registered user
@@ -21,5 +21,5 @@ public interface IRegisteredUserService {
 	 * @throws IllegalStateException if the new user do not meet the registration acceptance (age and country)
 	 * @throws InstanceAlreadyExistsException if the user name already exist
 	 */
-	public RegisteredUser addRegisteredUser(RegisteredUser userToAdd) throws IllegalArgumentException,IllegalStateException, InstanceAlreadyExistsException;
+	public User addRegisteredUser(User userToAdd) throws IllegalArgumentException,IllegalStateException, InstanceAlreadyExistsException;
 }

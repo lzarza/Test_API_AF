@@ -19,10 +19,10 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.TestAPIAF.dto.RegisteredUserDTO;
-import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.dto.UserDTO;
+import com.test.TestAPIAF.model.User;
 import com.test.TestAPIAF.model.SettingsCountry;
-import com.test.TestAPIAF.repository.RegisteredUserRepository;
+import com.test.TestAPIAF.repository.UserRepository;
 import com.test.TestAPIAF.repository.SettingsCountryRepository;
 
 /**
@@ -31,15 +31,15 @@ import com.test.TestAPIAF.repository.SettingsCountryRepository;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
-class RegisteredUserControllerTests {
+class UserControllerTests {
 
-	RegisteredUserDTO testDTO;
+	UserDTO testDTO;
 	
-	@Autowired private RegisteredUserRepository testUserRepository;
+	@Autowired private UserRepository testUserRepository;
 	
 	@Autowired private SettingsCountryRepository testCountryRepository;
 	
-	@Autowired private RegisteredUserController testRegisteredUserController;
+	@Autowired private UserController testRegisteredUserController;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -51,7 +51,7 @@ class RegisteredUserControllerTests {
 		testCountryRepository.deleteAll();
 		
 		//Create a default DTO for saving cases 
-		testDTO = new RegisteredUserDTO();
+		testDTO = new UserDTO();
 		testDTO.setBirthDate(LocalDate.of(1985, 4, 24));
 		testDTO.setUserName("Tester");
 		testDTO.setCountryName("France");
@@ -81,7 +81,7 @@ class RegisteredUserControllerTests {
 	@Test
 	void testCreateUser() {
 		try {
-			RegisteredUserDTO result = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = testRegisteredUserController.createUser(testDTO);
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -104,7 +104,7 @@ class RegisteredUserControllerTests {
 	void testCreateUser_NoGender() {
 		try {
 			testDTO.setGender(null);
-			RegisteredUserDTO result = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = testRegisteredUserController.createUser(testDTO);
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -127,7 +127,7 @@ class RegisteredUserControllerTests {
 		try {
 			
 			testDTO.setPhoneNumber(null);
-			RegisteredUserDTO result = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = testRegisteredUserController.createUser(testDTO);
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -269,9 +269,9 @@ class RegisteredUserControllerTests {
 		//insert a second time, shall fail with conflict
 		try {
 			testRegisteredUserController.createUser(testDTO);
-			ResponseEntity<RegisteredUserDTO> resultEntity = testRegisteredUserController.getUser(testDTO.getUserName());
+			ResponseEntity<UserDTO> resultEntity = testRegisteredUserController.getUser(testDTO.getUserName());
 			assertNotNull(resultEntity);
-			RegisteredUserDTO result = resultEntity.getBody();
+			UserDTO result = resultEntity.getBody();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -345,8 +345,8 @@ class RegisteredUserControllerTests {
 	 */
 	public void insertTestUser() {
 		ModelMapper modelMapper = new ModelMapper();
-		RegisteredUser entity = modelMapper.map(testDTO, RegisteredUser.class);
-		RegisteredUser result = testUserRepository.save(entity);
+		User entity = modelMapper.map(testDTO, User.class);
+		User result = testUserRepository.save(entity);
 		testDTO.setId(result.getId());
 	}
 

@@ -16,9 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.model.User;
 import com.test.TestAPIAF.model.SettingsCountry;
-import com.test.TestAPIAF.repository.RegisteredUserRepository;
+import com.test.TestAPIAF.repository.UserRepository;
 import com.test.TestAPIAF.repository.SettingsCountryRepository;
 
 /**
@@ -27,15 +27,15 @@ import com.test.TestAPIAF.repository.SettingsCountryRepository;
  */
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
-class RegisteredUserServiceTest {
+class UserServiceTest {
 
-	RegisteredUser testEntity;
+	User testEntity;
 	
-	@Autowired private RegisteredUserRepository testUserRepository;
+	@Autowired private UserRepository testUserRepository;
 	
 	@Autowired private SettingsCountryRepository testCountryRepository;
 	
-	@Autowired private RegisteredUserService testRegisteredUserService;
+	@Autowired private UserService testRegisteredUserService;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -47,7 +47,7 @@ class RegisteredUserServiceTest {
 		testCountryRepository.deleteAll();
 		
 		//Create a default DTO for saving cases 
-		testEntity = new RegisteredUser();
+		testEntity = new User();
 		testEntity.setBirthDate(LocalDate.of(1985, 4, 24));
 		testEntity.setUserName("Tester");
 		testEntity.setCountryName("France");
@@ -78,7 +78,7 @@ class RegisteredUserServiceTest {
 	@Test
 	void testCreateUser() {
 		try {
-			RegisteredUser result = null;
+			User result = null;
 			//Step 1 : all data
 			result = testRegisteredUserService.addRegisteredUser(testEntity);
 			assertNotNull(result);
@@ -245,7 +245,7 @@ class RegisteredUserServiceTest {
 	void getUserById() {
 		try {
 			testEntity = testUserRepository.save(testEntity);
-			RegisteredUser result = testRegisteredUserService.getRegisteredUser(testEntity.getUserName());
+			User result = testRegisteredUserService.getRegisteredUser(testEntity.getUserName());
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testEntity.getId(),result.getId());
@@ -266,7 +266,7 @@ class RegisteredUserServiceTest {
 	@Test
 	void getUserById_NotExist() {
 		try {
-			RegisteredUser result = testRegisteredUserService.getRegisteredUser(testEntity.getUserName());
+			User result = testRegisteredUserService.getRegisteredUser(testEntity.getUserName());
 			assertNull(result);
 		} catch (Exception e) {
 			fail(e.getMessage());

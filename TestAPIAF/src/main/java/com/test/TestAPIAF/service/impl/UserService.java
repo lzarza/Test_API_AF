@@ -9,28 +9,28 @@ import javax.management.InstanceAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.model.User;
 import com.test.TestAPIAF.model.SettingsCountry;
-import com.test.TestAPIAF.repository.RegisteredUserRepository;
+import com.test.TestAPIAF.repository.UserRepository;
 import com.test.TestAPIAF.repository.SettingsCountryRepository;
-import com.test.TestAPIAF.service.IRegisteredUserService;
+import com.test.TestAPIAF.service.IUserService;
 
 @Service
-public class RegisteredUserService implements IRegisteredUserService {
+public class UserService implements IUserService {
 	 
 	@Autowired
-	private RegisteredUserRepository registerUserRepository;
+	private UserRepository registerUserRepository;
 	
 	@Autowired
 	private SettingsCountryRepository settingsCountryRepository;
 	
 	@Override
-	public RegisteredUser getRegisteredUser(String userName) throws IllegalArgumentException {
+	public User getRegisteredUser(String userName) throws IllegalArgumentException {
 		if(userName==null || userName.trim().isEmpty()) {
 			throw new IllegalArgumentException("Username not sent");
 		}
 		
-		Optional<RegisteredUser> result = registerUserRepository.findByUserName(userName.trim());
+		Optional<User> result = registerUserRepository.findByUserName(userName.trim());
 		if(result.isEmpty()) {
 			return null;
 		}
@@ -38,7 +38,7 @@ public class RegisteredUserService implements IRegisteredUserService {
 	}
 
 	@Override
-	public RegisteredUser addRegisteredUser(RegisteredUser userToAdd) throws IllegalArgumentException,IllegalStateException, InstanceAlreadyExistsException {
+	public User addRegisteredUser(User userToAdd) throws IllegalArgumentException,IllegalStateException, InstanceAlreadyExistsException {
 		//Verify mandatory fields are filled
 		if(userToAdd.getUserName() == null || userToAdd.getUserName().trim().isEmpty()) {
 			throw new IllegalArgumentException("User name is mandatory");
@@ -66,7 +66,7 @@ public class RegisteredUserService implements IRegisteredUserService {
 		}
 		
 		//does the user already exists ?
-		Optional<RegisteredUser> result = registerUserRepository.findByUserName(userToAdd.getUserName());
+		Optional<User> result = registerUserRepository.findByUserName(userToAdd.getUserName());
 		if(result.isPresent()) {
 			throw new InstanceAlreadyExistsException("User alredy exist");
 		}

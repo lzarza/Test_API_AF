@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class RegisteredUser {
+public class User {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
@@ -87,7 +87,7 @@ public class RegisteredUser {
 		}
 		
 		//check both ids aren't null
-		RegisteredUser other = (RegisteredUser) obj;
+		User other = (User) obj;
 		if(this.id == null || other.id == null) {
 			return false;
 		}

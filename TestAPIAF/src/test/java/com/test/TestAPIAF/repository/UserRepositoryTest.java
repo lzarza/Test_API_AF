@@ -15,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import com.test.TestAPIAF.model.RegisteredUser;
+import com.test.TestAPIAF.model.User;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-integrationtest.properties")
-class RegisteredUserRepositoryTest {
+class UserRepositoryTest {
 
-	RegisteredUser testEntity;
+	User testEntity;
 	
-	@Autowired private RegisteredUserRepository testUserRepository;
+	@Autowired private UserRepository testUserRepository;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -34,7 +34,7 @@ class RegisteredUserRepositoryTest {
 		testUserRepository.deleteAll();
 		
 		//set up an user
-		testEntity = new RegisteredUser();
+		testEntity = new User();
 		testEntity.setBirthDate(LocalDate.of(1985, 4, 24));
 		testEntity.setUserName("Tester");
 		testEntity.setCountryName("France");
@@ -55,7 +55,7 @@ class RegisteredUserRepositoryTest {
 	 */
 	@Test
 	void testSave() {
-		RegisteredUser result = testUserRepository.save(testEntity);
+		User result = testUserRepository.save(testEntity);
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertEquals(testEntity.getBirthDate(),result.getBirthDate());
@@ -71,7 +71,7 @@ class RegisteredUserRepositoryTest {
 	@Test
 	void testSave_GenderNull() {
 		testEntity.setGender(null);
-		RegisteredUser result = testUserRepository.save(testEntity);
+		User result = testUserRepository.save(testEntity);
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertEquals(testEntity.getBirthDate(),result.getBirthDate());
@@ -87,7 +87,7 @@ class RegisteredUserRepositoryTest {
 	@Test
 	void testSave_PhoneNumberNull() {
 		testEntity.setPhoneNumber(null);
-		RegisteredUser result = testUserRepository.save(testEntity);
+		User result = testUserRepository.save(testEntity);
 		assertNotNull(result);
 		assertNotNull(result.getId());
 		assertEquals(testEntity.getBirthDate(),result.getBirthDate());
@@ -103,9 +103,9 @@ class RegisteredUserRepositoryTest {
 	@Test
 	void testFindByUserName() {
 		testUserRepository.save(testEntity);
-		Optional<RegisteredUser> resultOp = testUserRepository.findByUserName(testEntity.getUserName());
+		Optional<User> resultOp = testUserRepository.findByUserName(testEntity.getUserName());
 		assertTrue(resultOp.isPresent());
-		RegisteredUser result = resultOp.get();
+		User result = resultOp.get();
 		assertNotNull(result.getId());
 		assertEquals(testEntity.getBirthDate(),result.getBirthDate());
 		assertEquals(testEntity.getCountryName(),result.getCountryName());

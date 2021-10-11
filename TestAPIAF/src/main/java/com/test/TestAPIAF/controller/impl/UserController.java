@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.test.TestAPIAF.controller.IRegisteredUserController;
-import com.test.TestAPIAF.dto.RegisteredUserDTO;
-import com.test.TestAPIAF.model.RegisteredUser;
-import com.test.TestAPIAF.service.IRegisteredUserService;
+import com.test.TestAPIAF.controller.IUserController;
+import com.test.TestAPIAF.dto.UserDTO;
+import com.test.TestAPIAF.model.User;
+import com.test.TestAPIAF.service.IUserService;
 
 @RestController
 @RequestMapping("/api/v1")
-public class RegisteredUserController implements IRegisteredUserController {
+public class UserController implements IUserController {
 	
-	@Autowired IRegisteredUserService registeredUserService;
+	@Autowired IUserService registeredUserService;
 	
 	/**
 	 * Get a user using its user name
@@ -33,8 +33,8 @@ public class RegisteredUserController implements IRegisteredUserController {
 	 */
 	@Override
 	@GetMapping("/users/{username}")
-	public ResponseEntity<RegisteredUserDTO> getUser(@PathVariable String username){
-		RegisteredUser returnUser = null;
+	public ResponseEntity<UserDTO> getUser(@PathVariable String username){
+		User returnUser = null;
 		ModelMapper modelMapper = new ModelMapper();
 		try {
 			returnUser = registeredUserService.getRegisteredUser(username);
@@ -44,7 +44,7 @@ public class RegisteredUserController implements IRegisteredUserController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal error");
 		}
 		if(returnUser != null) {
-			return ResponseEntity.ok().body(modelMapper.map(returnUser, RegisteredUserDTO.class));
+			return ResponseEntity.ok().body(modelMapper.map(returnUser, UserDTO.class));
 		}else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
 		}
@@ -58,14 +58,14 @@ public class RegisteredUserController implements IRegisteredUserController {
 	 */
 	@Override
 	@PostMapping("/users")
-	public RegisteredUserDTO createUser(@RequestBody RegisteredUserDTO user){
+	public UserDTO createUser(@RequestBody UserDTO user){
 		try {
 			ModelMapper modelMapper = new ModelMapper();
-			RegisteredUser modelUser = modelMapper.map(user, RegisteredUser.class);
-			RegisteredUser returnUser = registeredUserService.addRegisteredUser(modelUser);
+			User modelUser = modelMapper.map(user, User.class);
+			User returnUser = registeredUserService.addRegisteredUser(modelUser);
 			/* I let the result unchecked because I had to throw an exception if it's null (save shall not return null). 
 			the exception will be caught by the last catch sending the correct status */
-			return modelMapper.map(returnUser, RegisteredUserDTO.class);
+			return modelMapper.map(returnUser, UserDTO.class);
 		}catch(IllegalArgumentException iae) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, iae.getLocalizedMessage());
 		}catch(IllegalStateException ise) {
