@@ -1,5 +1,7 @@
 package com.test.TestAPIAF.controller.impl;
 
+import java.net.URI;
+
 import javax.management.InstanceAlreadyExistsException;
 
 import org.modelmapper.ModelMapper;
@@ -72,20 +74,20 @@ public class UserController implements IUserController {
 	@Override
 	@PostMapping("/users")
 	@ApiResponses(value={
-		@ApiResponse(code=200, message="OK", response = UserDTO.class),
+		@ApiResponse(code=201, message="Created", response = UserDTO.class),
 		@ApiResponse(code=400, message="Invalid user name, phone number, country"),
 		@ApiResponse(code=403, message="Country or age does not fit the registration rights settings"),
 		@ApiResponse(code=409, message="User already exists"),
 		@ApiResponse(code=500, message="Internal error")
 	})
-	public UserDTO createUser(@RequestBody UserDTO user){
+	public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user){
 		try {
 			ModelMapper modelMapper = new ModelMapper();
 			User modelUser = modelMapper.map(user, User.class);
 			User returnUser = registeredUserService.addRegisteredUser(modelUser);
 			/* I let the result unchecked because I had to throw an exception if it's null (save shall not return null). 
 			the exception will be caught by the last catch sending the correct status */
-			return modelMapper.map(returnUser, UserDTO.class);
+			return ResponseEntity.created(URI.create("/users/" + returnUser.getUserName())).body(modelMapper.map(returnUser, UserDTO.class));
 		}catch(IllegalArgumentException iae) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, iae.getLocalizedMessage());
 		}catch(IllegalStateException ise) {

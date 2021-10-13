@@ -11,7 +11,7 @@ public interface IUserController {
 	 * @param user : user data
 	 * @return the user saved in database
 	 */
-	UserDTO createUser(UserDTO user);
+	ResponseEntity<UserDTO> createUser(UserDTO user);
 
 	/**
 	 * Get a user using its user name
