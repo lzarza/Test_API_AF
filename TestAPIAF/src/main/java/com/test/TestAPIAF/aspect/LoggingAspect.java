@@ -1,8 +1,6 @@
 package com.test.TestAPIAF.aspect;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -43,29 +41,29 @@ public class LoggingAspect {
 
 		// Measure method execution time
 		StopWatch stopWatch = new StopWatch(className + "->" + methodName);
+		Object result = null;
 		stopWatch.start(methodName);
-		Object result = joinPoint.proceed();
-		stopWatch.stop();
-		// Log method execution time
-		if (logger.isInfoEnabled()) {
-			logger.info(stopWatch.prettyPrint());
-			if(result != null) {
-				logger.info("Output {} -> {} : ",className, methodName);
-				logger.info(result.toString());
-			}else {
-				logger.info("Output {} -> {} : none",className, methodName);
+		try {
+			result = joinPoint.proceed();
+			stopWatch.stop();
+			if (logger.isInfoEnabled()) {
+				if(result != null) {
+					logger.info("Output {} -> {} : ",className, methodName);
+					logger.info(result.toString());
+				} else {
+					logger.info("Output {} -> {} : none",className, methodName);
+				}
+			}
+		}catch(Exception ex) {
+			stopWatch.stop(); //I want to have execution times on exceptions too, then I catch, log and throw it.
+			logger.error("Error {} -> {} : {}",className, methodName, ex.getMessage());
+			throw ex;
+		}finally {
+			// Log method execution time on every case
+			if (logger.isInfoEnabled()) {
+				logger.info(stopWatch.prettyPrint());
 			}
 		}
 		return result;
 	}
-
-	@AfterThrowing(pointcut="execution(* com.test.TestAPIAF.controller.*.*(..))",throwing="ex")
-    public void logAfterThrowing(JoinPoint joinPoint, Exception ex) {
-		// Get method details
-		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-		String className = methodSignature.getDeclaringType().getSimpleName();
-		String methodName = methodSignature.getName();
-		logger.error("Error {} -> {} : {}",className, methodName, ex.getMessage());
-    }
-
 }

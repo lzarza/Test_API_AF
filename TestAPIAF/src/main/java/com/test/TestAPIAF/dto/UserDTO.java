@@ -57,4 +57,21 @@ public class UserDTO {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	/**
+	 * Override to string to have a prettier display on logging.
+	 */
+	@Override public String toString() {
+		StringBuilder descBld = new StringBuilder();
+		descBld.append("Id : ").append(this.id).append("; ");
+		descBld.append("Username : ").append(this.userName).append("; ");
+		descBld.append("Country : ").append(this.countryName).append("; ");
+		descBld.append("BirthDate : ").append(this.birthDate.toString()).append("; ");
+		if(phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+			descBld.append("PhoneNumber : ").append(this.phoneNumber).append("; ");
+		}
+		if(gender != null && !gender.trim().isEmpty()) {
+			descBld.append("Gender : ").append(this.gender).append("; ");
+		}
+		return descBld.toString();
+	}
 }

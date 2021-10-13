@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * 
@@ -14,15 +15,16 @@ import javax.persistence.Id;
  * if the country exist on database, we accept users from this country to register if the user has the minimum age
  */
 @Entity
+@Table(name = "SETTINGS_COUNTRY")
 public class SettingsCountry {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@Column(unique=true, nullable=false)
+	@Column(name = "COUNTRY_NAME",unique=true, nullable=false)
 	private String countryName; 
 	
-	@Column(nullable=false)
+	@Column(name = "MINIMUM_AGE",nullable=false)
 	private Integer minimumAge;
 
 	public Long getId() {
