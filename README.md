@@ -18,7 +18,7 @@ The aim is to register and search an user into a user database.
 ## Run and Test
 
 - Run API using maven spring-boot:run
-- You can see your springboot api is running using this link : http://localhost:8080/test-api-test/swagger-ui.html
+- You can see your springboot api is running using this link : http://localhost:8080/test-api-af/swagger-ui.html
 - You may find some postman requests for test your application
 
 ## Note from developper
