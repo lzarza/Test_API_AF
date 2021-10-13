@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "eeac443f-d428-4caf-9c54-743abe6d68df",
+		"name": "ExampleRequestsAPITestAF",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PostUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"birthDate\":\"24-04-1986\",\r\n  \"countryName\":\"France\",\r\n  \"gender\":\"M\",\r\n  \"id\":0,\r\n  \"phoneNumber\":\"+33621885337\",\r\n  \"userName\":\"LaurentZarza\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/test-api-test/api/v1/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test-api-test",
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUserByName",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/test-api-test/api/v1/users/LaurentZarza",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test-api-test",
+						"api",
+						"v1",
+						"users",
+						"LaurentZarza"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
