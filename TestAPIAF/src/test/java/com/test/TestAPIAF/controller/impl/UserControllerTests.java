@@ -81,7 +81,8 @@ class UserControllerTests {
 	@Test
 	void testCreateUser() {
 		try {
-			UserDTO result = testRegisteredUserController.createUser(testDTO);
+			ResponseEntity<UserDTO> resultEntity = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = resultEntity.getBody();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -104,7 +105,8 @@ class UserControllerTests {
 	void testCreateUser_NoGender() {
 		try {
 			testDTO.setGender(null);
-			UserDTO result = testRegisteredUserController.createUser(testDTO);
+			ResponseEntity<UserDTO> resultEntity = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = resultEntity.getBody();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
@@ -127,7 +129,8 @@ class UserControllerTests {
 		try {
 			
 			testDTO.setPhoneNumber(null);
-			UserDTO result = testRegisteredUserController.createUser(testDTO);
+			ResponseEntity<UserDTO> resultEntity = testRegisteredUserController.createUser(testDTO);
+			UserDTO result = resultEntity.getBody();
 			assertNotNull(result);
 			assertNotNull(result.getId());
 			assertEquals(testDTO.getBirthDate(),result.getBirthDate());
