@@ -19,6 +19,9 @@ import com.test.TestAPIAF.dto.UserDTO;
 import com.test.TestAPIAF.model.User;
 import com.test.TestAPIAF.service.IUserService;
 
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
+
 @RestController
 @RequestMapping("/api/v1")
 public class UserController implements IUserController {
@@ -30,9 +33,19 @@ public class UserController implements IUserController {
 	 * @param userName
 	 * @return the user found with this username
 	 * @throws ResponseStatusException : Bad Request for parameters with invalid formats, Internal Server Error other other issues, not found if no user found
+	 * ApiResponses(code=200 message="OK")
+	 * ApiResponses(code=400 message="User name invalid")
+	 * ApiResponses(code=404 message="Not found")
+	 * ApiResponses(code=500 message="Internal error")
 	 */
 	@Override
 	@GetMapping("/users/{username}")
+	@ApiResponses(value={
+		@ApiResponse(code=200, message="OK", response = UserDTO.class),
+		@ApiResponse(code=400, message="User name invalid"),
+		@ApiResponse(code=404, message="Not found"),
+		@ApiResponse(code=500, message="Internal error")
+	})
 	public ResponseEntity<UserDTO> getUser(@PathVariable String username){
 		User returnUser = null;
 		ModelMapper modelMapper = new ModelMapper();
@@ -58,6 +71,13 @@ public class UserController implements IUserController {
 	 */
 	@Override
 	@PostMapping("/users")
+	@ApiResponses(value={
+		@ApiResponse(code=200, message="OK", response = UserDTO.class),
+		@ApiResponse(code=400, message="Invalid user name, phone number, country"),
+		@ApiResponse(code=403, message="Country or age does not fit the registration rights settings"),
+		@ApiResponse(code=409, message="User already exists"),
+		@ApiResponse(code=500, message="Internal error")
+	})
 	public UserDTO createUser(@RequestBody UserDTO user){
 		try {
 			ModelMapper modelMapper = new ModelMapper();
